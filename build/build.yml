@@ -37,8 +37,7 @@ steps:
   displayName: 'dotnet build $(buildConfiguration)'
   inputs:
     command: 'custom'
-    custom: 'build --configuration $(buildConfiguration) -p:Version=$(versionNumber)'
-    projects: '**/*.sln'
+    custom: 'build src/Pyrite.Content.sln --configuration $(buildConfiguration) -p:Version=$(versionNumber)'
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet test'
