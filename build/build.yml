@@ -51,13 +51,9 @@ steps:
   inputs:
     command: pack
     publishWebProjects: False
-    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory) -p:Version=$(versionNumber)'
     projects: '**/*.sln'
     zipAfterPublish: False
-    versioningScheme: byPrereleaseNumber
-    majorVersion: '$(versionMajor)'
-    minorVersion: '$(versionMinor)'
-    patchVersion: '$(versionPatch)'
 
 - task: PublishBuildArtifacts@1
   displayName: 'publish artifact'
