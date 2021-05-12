@@ -1,4 +1,4 @@
-name: Pyrite.Content - $(version)
+name: '$(BuildDefinitionName)_$(SourceBranchName)_$(Date:yyyyMMdd)_$(version)'
 
 trigger:
 - master
@@ -8,7 +8,7 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
-  versionMajor: 0
+  versionMajor: 1
   versionMinor: 1
   versionPatch: 0
   version: $(versionMajor).$(versionMinor).$(versionPatch).$(r:Rev)
