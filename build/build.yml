@@ -30,21 +30,21 @@ steps:
   displayName: 'dotnet restore'
   inputs:
     command: 'custom'
-    custom: 'dotnet restore'
+    custom: 'restore'
     projects: '**/*.sln'
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet build $(buildConfiguration)'
   inputs:
     command: 'custom'
-    custom: 'dotnet build --configuration $(buildConfiguration) -p:Version=$(versionNumber)'
+    custom: 'build --configuration $(buildConfiguration) -p:Version=$(versionNumber)'
     projects: '**/*.sln'
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet test'
   inputs:
     command: 'custom'
-    custom: 'dotnet test --configuration $(buildConfiguration) --collect "Code coverage"'
+    custom: 'test --configuration $(buildConfiguration) --collect "Code coverage"'
     projects: '**/*UnitTest.csproj'
 
 - task: DotNetCoreCLI@2
@@ -52,7 +52,7 @@ steps:
   inputs:
     command: 'custom'
     publishWebProjects: False
-    custom: 'dotnet pack --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory) -p:Version=$(versionNumber) -p:PackageVersion=$(versionNumber)'
+    custom: 'pack --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory) -p:Version=$(versionNumber) -p:PackageVersion=$(versionNumber)'
     projects: '**/*.sln'
     versioningScheme: byBuildNumber
     zipAfterPublish: False
