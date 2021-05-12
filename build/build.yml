@@ -9,7 +9,7 @@ pool:
 variables:
   buildConfiguration: 'Release'
   version.MajorMinorPatch: '0.1.0' # Manually adjust the version number as needed for semantic versioning. Revision is auto-incremented.
-  version.Revision: $[counter(variables['version.MajorMinor'], 0)]
+  version.Revision: $[counter(variables['version.MajorMinorPatch'], 0)]
   versionNumber: '$(version.MajorMinorPatch).$(version.Revision)'
 
 steps:
@@ -18,7 +18,7 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
-      [string] $buildName = "$(versionNumber)_$(Build.SourceBranchName)"
+      [string] $buildName = "$(versionNumber)"
       Write-Host "Setting the name of the build to '$buildName'."
       Write-Host "##vso[build.updatebuildnumber]$buildName"
 
@@ -33,7 +33,7 @@ steps:
   displayName: 'dotnet build $(buildConfiguration)'
   inputs:
     command: 'build'
-    arguments: '--configuration $(buildConfiguration) -p:Version=$(version)'
+    arguments: '--configuration $(buildConfiguration) -p:Version=$(versionNumber)'
     projects: '**/*.sln'
 
 - task: DotNetCoreCLI@2
@@ -48,7 +48,7 @@ steps:
   inputs:
     command: pack
     publishWebProjects: False
-    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory) -p:PackageVersion=$(version)'
+    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory) -p:PackageVersion=$(versionNumber)'
     projects: '**/*.sln'
     zipAfterPublish: False
 
