@@ -1,4 +1,4 @@
-name: '$(BuildDefinitionName)_$(SourceBranchName)_$(Date:yyyyMMdd)_$(version)'
+name: '$(version)'
 
 trigger:
 - master
