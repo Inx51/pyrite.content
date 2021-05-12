@@ -43,15 +43,14 @@ steps:
   displayName: 'dotnet test'
   inputs:
     command: 'custom'
-    custom: 'test --configuration $(buildConfiguration) --collect "Code coverage"'
-    projects: '**/*UnitTest.csproj'
+    custom: 'test src  --filter TestCategory=UnitTest --configuration $(buildConfiguration) --collect "Code coverage"'
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet pack'
   inputs:
     command: 'custom'
     publishWebProjects: False
-    custom: 'pack --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory) -p:Version=$(versionNumber) -p:PackageVersion=$(versionNumber)'
+    custom: 'pack src --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory) -p:Version=$(versionNumber) -p:PackageVersion=$(versionNumber)'
     projects: '**/*.sln'
     versioningScheme: byBuildNumber
     zipAfterPublish: False
