@@ -1,3 +1,5 @@
+name: Pyrite.Content - $(version)
+
 trigger:
 - master
 
@@ -6,6 +8,10 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
+  versionMajor: 0
+  versionMinor: 1
+  versionPatch: 0
+  version: $(versionMajor).$(versionMinor).$(versionPatch).$(r:Rev)
 
 steps:
 - task: DotNetCoreCLI@2
@@ -29,13 +35,13 @@ steps:
     projects: '**/*UnitTest.csproj'
 
 - task: DotNetCoreCLI@2
-  displayName: 'dotnet publish'
+  displayName: 'dotnet pack'
   inputs:
-    command: publish
+    command: pack
     publishWebProjects: False
-    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory) -p:PackageVersion'
     projects: '**/*.sln'
-    zipAfterPublish: True
+    zipAfterPublish: False
 
 - task: PublishBuildArtifacts@1
   displayName: 'publish artifact'
