@@ -29,7 +29,8 @@ steps:
 - task: DotNetCoreCLI@2
   displayName: 'dotnet restore'
   inputs:
-    command: 'dotnet restore'
+    command: 'custom'
+    custom: 'dotnet restore'
     projects: '**/*.sln'
 
 - task: DotNetCoreCLI@2
