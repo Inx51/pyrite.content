@@ -51,7 +51,7 @@ steps:
   inputs:
     command: pack
     publishWebProjects: False
-    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory) -p:Version=$(versionNumber) -p:PackageVersion=$(versionNumber)'
     projects: '**/*.sln'
     versioningScheme: byBuildNumber
     zipAfterPublish: False
