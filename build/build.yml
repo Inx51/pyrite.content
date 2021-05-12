@@ -8,8 +8,11 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
-  version.MajorMinorPatch: '0.1.0' # Manually adjust the version number as needed for semantic versioning. Revision is auto-incremented.
-  version.Revision: $[counter(variables['version.MajorMinorPatch'], 0)]
+  versionMajor: 0
+  versionMinor: 1
+  versionPatch: 0
+  versionMajorMinorPatch: '$(versionMajor).$(versionMinor).$(versionPatch)' # Manually adjust the version number as needed for semantic versioning. Revision is auto-incremented.
+  versionRevision: $[counter(variables['version.MajorMinorPatch'], 0)]
   versionNumber: '$(version.MajorMinorPatch).$(version.Revision)'
 
 steps:
@@ -48,9 +51,13 @@ steps:
   inputs:
     command: pack
     publishWebProjects: False
-    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory) -p:PackageVersion=$(versionNumber)'
+    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
     projects: '**/*.sln'
     zipAfterPublish: False
+    versioningScheme: byPrereleaseNumber
+    majorVersion: '$(versionMajor)'
+    minorVersion: '$(versionMinor)'
+    patchVersion: '$(versionPatch)'
 
 - task: PublishBuildArtifacts@1
   displayName: 'publish artifact'
