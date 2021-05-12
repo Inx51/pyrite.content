@@ -35,23 +35,23 @@ steps:
 - task: DotNetCoreCLI@2
   displayName: 'dotnet build $(buildConfiguration)'
   inputs:
-    command: 'build'
-    arguments: '--configuration $(buildConfiguration) -p:Version=$(versionNumber)'
+    command: 'custom'
+    custom: 'build --configuration $(buildConfiguration) -p:Version=$(versionNumber)'
     projects: '**/*.sln'
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet test'
   inputs:
-    command: 'test'
-    arguments: '--configuration $(buildConfiguration) --collect "Code coverage"'
+    command: 'custom'
+    custom: 'test --configuration $(buildConfiguration) --collect "Code coverage"'
     projects: '**/*UnitTest.csproj'
 
 - task: DotNetCoreCLI@2
   displayName: 'dotnet pack'
   inputs:
-    command: pack
+    command: 'custom'
     publishWebProjects: False
-    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory) -p:Version=$(versionNumber) -p:PackageVersion=$(versionNumber)'
+    custom: 'pack --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory) -p:Version=$(versionNumber) -p:PackageVersion=$(versionNumber)'
     projects: '**/*.sln'
     versioningScheme: byBuildNumber
     zipAfterPublish: False
