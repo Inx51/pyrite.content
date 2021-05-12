@@ -8,12 +8,21 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
-  versionMajor: 1
-  versionMinor: 1
-  versionPatch: 0
-  version: $(versionMajor).$(versionMinor).$(versionPatch).$(r:Rev)
+  version.MajorMinorPatch: '0.1.0' # Manually adjust the version number as needed for semantic versioning. Revision is auto-incremented.
+  version.Revision: $[counter(variables['version.MajorMinor'], 0)]
+  versionNumber: '$(version.MajorMinorPatch).$(version.Revision)'
 
 steps:
+- task: PowerShell@2
+  displayName: Set the name of the build
+  inputs:
+    targetType: 'inline'
+    script: |
+      [string] $buildName = "$(versionNumber)_$(Build.SourceBranchName)"
+      Write-Host "Setting the name of the build to '$buildName'."
+      Write-Host "##vso[build.updatebuildnumber]$buildName"
+
+
 - task: DotNetCoreCLI@2
   displayName: 'dotnet restore'
   inputs:
