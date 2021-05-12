@@ -12,8 +12,8 @@ variables:
   versionMinor: 1
   versionPatch: 0
   versionMajorMinorPatch: '$(versionMajor).$(versionMinor).$(versionPatch)' # Manually adjust the version number as needed for semantic versioning. Revision is auto-incremented.
-  versionRevision: $[counter(variables['version.MajorMinorPatch'], 0)]
-  versionNumber: '$(version.MajorMinorPatch).$(version.Revision)'
+  versionRevision: $[counter(variables['versionMajorMinorPatch'], 0)]
+  versionNumber: '$(versionMajorMinorPatch).$(versionRevision)'
 
 steps:
 - task: PowerShell@2
