@@ -22,7 +22,7 @@ stages:
     displayName: Build stage
     jobs:
       - job: Build
-        displayName: 'Build version $(versionNumber)'
+        displayName: 'Build'
         pool:
           vmImage: $(vmImage)
         steps:
