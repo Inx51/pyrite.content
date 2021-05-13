@@ -25,31 +25,10 @@ steps:
       Write-Host "Setting the name of the build to '$buildName'."
       Write-Host "##vso[build.updatebuildnumber]$buildName"
 
-# - task: DotNetCoreCLI@2
-#   displayName: 'dotnet build $(buildConfiguration)'
-#   inputs:
-#     command: 'custom'
-#     custom: 'build src/Pyrite.Content.sln --configuration $(buildConfiguration) -p:Version=$(versionNumber)'
-
-# - task: DotNetCoreCLI@2
-#   displayName: 'dotnet test'
-#   inputs:
-#     command: 'custom'
-#     custom: 'test src  --filter TestCategory=UnitTest --configuration $(buildConfiguration) --collect "Code coverage"'
-
-# - task: DotNetCoreCLI@2
-#   displayName: 'dotnet pack'
-#   inputs:
-#     command: 'custom'
-#     publishWebProjects: False
-#     custom: 'pack src --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory) -p:Version=$(versionNumber) -p:PackageVersion=$(versionNumber)'
-#     projects: '**/*.sln'
-#     versioningScheme: byBuildNumber
-#     zipAfterPublish: False
-
-- script:
+- script: |
+    dotnet restore --configuration $(buildConfiguration) /p:Version=$(versionNumber)
   workingDirectory: '$(Build.SourcesDirectory)/src'
-  displayName: 'Set working directory'
+  displayName: 'dotnet restore'
   failOnStderr: True
 
 - script: |
@@ -61,7 +40,7 @@ steps:
 - script: |
     dotnet test --filter TestCategory=UnitTest --configuration $(buildConfiguration) --collect "Code coverage"
   workingDirectory: '$(Build.SourcesDirectory)/src'
-  displayName: 'dotnet build'
+  displayName: 'dotnet test'
   failOnStderr: True
 
 - script: |
