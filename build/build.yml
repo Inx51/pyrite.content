@@ -22,7 +22,7 @@ stages:
     displayName: Build stage
     jobs:
       - job: Build
-        displayName: Build
+        displayName: Build version $(versionNumber)
         pool:
           vmImage: $(vmImage)
         steps:
@@ -68,7 +68,7 @@ stages:
     displayName: Deploy stage
     jobs:
       - job: Deploy_development
-        displayName: Deploy job to development feed
+        displayName: Deploy to development feed
         condition: eq(variables.isDevelopment, true)
         pool:
           vmImage: $(vmImage)
@@ -85,7 +85,7 @@ stages:
             nuGetFeedType: 'internal'
             publishVstsFeed: '6f28ef3e-8e78-4c64-b5d1-4c5573bc1c51/e46b9712-ba8f-425f-b100-b2f168bb98cc'
       - job: Deploy_release
-        displayName: Deploy job to release feed
+        displayName: Deploy to release feed
         condition: and(succeeded(), eq(variables.isRelease, true))
         pool:
           vmImage: $(vmImage)
