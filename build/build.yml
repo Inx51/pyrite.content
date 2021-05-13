@@ -54,5 +54,3 @@ steps:
   inputs:
     pathToPublish: $(Build.ArtifactStagingDirectory)
     artifactName: artifact
-    versioningScheme: byEnvVar
-    versionEnvVar: versionMajorMinorPatch
