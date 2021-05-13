@@ -14,6 +14,7 @@ variables:
   versionMajorMinorPatch: '$(versionMajor).$(versionMinor).$(versionPatch)'
   versionRevision: $[counter(variables['versionMajorMinorPatch'], 0)]
   versionNumber: '$(versionMajorMinorPatch).$(versionRevision)'
+  sourceDir: '$(Build.SourcesDirectory)/src'
 
 steps:
 - task: PowerShell@2
@@ -27,13 +28,13 @@ steps:
 
 - script: |
     dotnet restore
-  workingDirectory: '$(Build.SourcesDirectory)/src'
+  workingDirectory: '$(sourceDir)'
   displayName: 'dotnet restore'
   failOnStderr: True
 
 - script: |
     dotnet build --configuration $(buildConfiguration) /p:Version=$(versionNumber)
-  workingDirectory: '$(Build.SourcesDirectory)/src'
+  workingDirectory: '$(sourceDir)'
   displayName: 'dotnet build'
   failOnStderr: True
 
@@ -45,8 +46,8 @@ steps:
 
 - script: |
     dotnet pack --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory) -p:Version=$(versionNumber) -p:PackageVersion=$(versionNumber)
-  workingDirectory: '$(Build.SourcesDirectory)/src'
-  displayName: 'dotnet build'
+  workingDirectory: '$(sourceDir)'
+  displayName: 'dotnet pack'
   failOnStderr: True
 
 - task: PublishBuildArtifacts@1
