@@ -2,10 +2,9 @@ name: '$(versionNumber)'
 
 trigger:
 - master
+- releases/*
 
 variables:
-  vmImage: 'windows-latest'
-  buildConfiguration: 'Release'
   versionMajor: 0
   versionMinor: 1
   versionPatch: 0
@@ -13,13 +12,18 @@ variables:
   versionRevision: $[counter(variables['versionMajorMinorPatch'], 0)]
   versionNumber: '$(versionMajorMinorPatch).$(versionRevision)'
   sourceDir: '$(Build.SourcesDirectory)/src'
+  isDevelopment: $[eq(variables['Build.SourceBranch'], 'refs/heads/master')]
+  isRelease: $[eq(variables['Build.SourceBranch'], 'refs/heads/release/*')]
+  vmImage: 'windows-latest'
+  buildConfiguration: 'Release'
 
 stages:
   - stage: Build
     displayName: Build stage
     jobs:
-      - job: Build
-        displayName: Build job
+      - job: Build_development
+        displayName: Build development
+        condition: $(isDevelopment)
         pool:
           vmImage: $(vmImage)
         steps:
@@ -62,10 +66,11 @@ stages:
             pathToPublish: $(Build.ArtifactStagingDirectory)
             artifactName: artifact
   - stage: Deploy
-    displayName: Deploy stages
+    displayName: Deploy stage
     jobs:
-      - job: Deploy
-        displayName: Deploy job
+      - job: Deploy_development
+        displayName: Deploy job to development feed
+        condition: $(isDevelopment)
         pool:
           vmImage: $(vmImage)
         steps:
@@ -80,5 +85,15 @@ stages:
             packagesToPush: '$(Pipeline.Workspace)/*.nupkg'
             nuGetFeedType: 'internal'
             publishVstsFeed: '6f28ef3e-8e78-4c64-b5d1-4c5573bc1c51/e46b9712-ba8f-425f-b100-b2f168bb98cc'
-
-
+      - job: Deploy_release
+        displayName: Deploy job to release feed
+        condition: $(isRelease)
+        pool:
+          vmImage: $(vmImage)
+        steps:
+        - task: PowerShell@2
+          displayName: 'Not yet implemented error'
+          inputs:
+            targetType: 'inline'
+            script: |      
+              Write-Error "Deploy to release is not yet implemented"
