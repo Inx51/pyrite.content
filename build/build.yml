@@ -54,16 +54,19 @@ steps:
 
 - script: |
     dotnet build --configuration $(buildConfiguration) /p:Version=$(versionNumber)
+  workingDirectory: '$(Build.SourcesDirectory)/src'
   displayName: 'dotnet build'
   failOnStderr: True
 
 - script: |
     dotnet test --filter TestCategory=UnitTest --configuration $(buildConfiguration) --collect "Code coverage"
+  workingDirectory: '$(Build.SourcesDirectory)/src'
   displayName: 'dotnet build'
   failOnStderr: True
 
 - script: |
     dotnet pack --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory) -p:Version=$(versionNumber) -p:PackageVersion=$(versionNumber)
+  workingDirectory: '$(Build.SourcesDirectory)/src'
   displayName: 'dotnet build'
   failOnStderr: True
 
