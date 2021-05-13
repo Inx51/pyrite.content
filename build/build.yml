@@ -26,7 +26,7 @@ steps:
       Write-Host "##vso[build.updatebuildnumber]$buildName"
 
 - script: |
-    dotnet restore --configuration $(buildConfiguration) /p:Version=$(versionNumber)
+    dotnet restore
   workingDirectory: '$(Build.SourcesDirectory)/src'
   displayName: 'dotnet restore'
   failOnStderr: True
