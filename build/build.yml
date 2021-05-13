@@ -11,7 +11,7 @@ variables:
   versionMajor: 0
   versionMinor: 1
   versionPatch: 0
-  versionMajorMinorPatch: '$(versionMajor).$(versionMinor).$(versionPatch)' # Manually adjust the version number as needed for semantic versioning. Revision is auto-incremented.
+  versionMajorMinorPatch: '$(versionMajor).$(versionMinor).$(versionPatch)'
   versionRevision: $[counter(variables['versionMajorMinorPatch'], 0)]
   versionNumber: '$(versionMajorMinorPatch).$(versionRevision)'
 
@@ -25,35 +25,47 @@ steps:
       Write-Host "Setting the name of the build to '$buildName'."
       Write-Host "##vso[build.updatebuildnumber]$buildName"
 
+# - task: DotNetCoreCLI@2
+#   displayName: 'dotnet build $(buildConfiguration)'
+#   inputs:
+#     command: 'custom'
+#     custom: 'build src/Pyrite.Content.sln --configuration $(buildConfiguration) -p:Version=$(versionNumber)'
 
-- task: DotNetCoreCLI@2
-  displayName: 'dotnet restore'
-  inputs:
-    command: 'custom'
-    custom: 'restore'
-    projects: '**/*.sln'
+# - task: DotNetCoreCLI@2
+#   displayName: 'dotnet test'
+#   inputs:
+#     command: 'custom'
+#     custom: 'test src  --filter TestCategory=UnitTest --configuration $(buildConfiguration) --collect "Code coverage"'
 
-- task: DotNetCoreCLI@2
-  displayName: 'dotnet build $(buildConfiguration)'
-  inputs:
-    command: 'custom'
-    custom: 'build src/Pyrite.Content.sln --configuration $(buildConfiguration) -p:Version=$(versionNumber)'
+# - task: DotNetCoreCLI@2
+#   displayName: 'dotnet pack'
+#   inputs:
+#     command: 'custom'
+#     publishWebProjects: False
+#     custom: 'pack src --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory) -p:Version=$(versionNumber) -p:PackageVersion=$(versionNumber)'
+#     projects: '**/*.sln'
+#     versioningScheme: byBuildNumber
+#     zipAfterPublish: False
 
-- task: DotNetCoreCLI@2
-  displayName: 'dotnet test'
-  inputs:
-    command: 'custom'
-    custom: 'test src  --filter TestCategory=UnitTest --configuration $(buildConfiguration) --collect "Code coverage"'
+- script:
+  workingDirectory: '$(Build.SourcesDirectory)/src'
+  displayName: 'Set working directory'
+  failOnStderr: True
 
-- task: DotNetCoreCLI@2
-  displayName: 'dotnet pack'
-  inputs:
-    command: 'custom'
-    publishWebProjects: False
-    custom: 'pack src --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory) -p:Version=$(versionNumber) -p:PackageVersion=$(versionNumber)'
-    projects: '**/*.sln'
-    versioningScheme: byBuildNumber
-    zipAfterPublish: False
+- script: |
+    dotnet build --configuration $(buildConfiguration) /p:Version=$(versionNumber)
+  displayName: 'dotnet build'
+  failOnStderr: True
+
+- script: |
+    dotnet test --filter TestCategory=UnitTest --configuration $(buildConfiguration) --collect "Code coverage"
+  displayName: 'dotnet build'
+  failOnStderr: True
+
+- script: |
+    dotnet pack --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory) -p:Version=$(versionNumber) -p:PackageVersion=$(versionNumber)
+  displayName: 'dotnet build'
+  failOnStderr: True
 
 - task: PublishBuildArtifacts@1
   displayName: 'publish artifact'
