@@ -73,12 +73,15 @@ stages:
         pool:
           vmImage: $(vmImage)
         steps:
+        - checkout: none
         - task: DownloadPipelineArtifact@2
+          displayName: Download build artifact
           inputs:
             buildType: 'current'
             artifactName: 'artifact'
             targetPath: '$(Pipeline.Workspace)'
         - task: DotNetCoreCLI@2
+          displayName: Push packages to Development feed
           inputs:
             command: 'push'
             packagesToPush: '$(Pipeline.Workspace)/*.nupkg'
@@ -90,6 +93,7 @@ stages:
         pool:
           vmImage: $(vmImage)
         steps:
+        - checkout: none
         - task: PowerShell@2
           displayName: 'Not yet implemented error'
           inputs:
