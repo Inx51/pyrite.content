@@ -1,9 +1,7 @@
-name: '$(versionNumber)'
-
+name: '{Set by script}'
 trigger:
 - master
 - releases/*
-
 variables:
   versionMajor: 0
   versionMinor: 1
@@ -16,7 +14,6 @@ variables:
   isRelease: $[eq(variables['Build.SourceBranch'], 'refs/heads/release/*')]
   vmImage: 'windows-latest'
   buildConfiguration: 'Release'
-
 stages:
   - stage: Build
     displayName: Build stage
@@ -34,31 +31,26 @@ stages:
               [string] $buildName = "$(versionNumber)"
               Write-Host "Setting the name of the build to '$buildName'."
               Write-Host "##vso[build.updatebuildnumber]$buildName"
-
         - script: |
             dotnet restore
           workingDirectory: '$(sourceDir)'
           displayName: 'dotnet restore'
           failOnStderr: True
-
         - script: |
             dotnet build --configuration $(buildConfiguration) /p:Version=$(versionNumber)
           workingDirectory: '$(sourceDir)'
           displayName: 'dotnet build'
           failOnStderr: True
-
         - script: |
             dotnet test --filter TestCategory=UnitTest --configuration $(buildConfiguration) --collect "Code coverage"
           workingDirectory: '$(Build.SourcesDirectory)/src'
           displayName: 'dotnet test'
           failOnStderr: True
-
         - script: |
             dotnet pack --configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory) -p:Version=$(versionNumber) -p:PackageVersion=$(versionNumber)
           workingDirectory: '$(sourceDir)'
           displayName: 'dotnet pack'
           failOnStderr: True
-
         - task: PublishBuildArtifacts@1
           displayName: 'publish artifact'
           inputs:
