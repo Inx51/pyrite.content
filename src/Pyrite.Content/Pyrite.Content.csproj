@@ -5,11 +5,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.Primitives" Version="5.0.1" />
+    <ProjectReference Include="..\Pyrite.Content.Abstractions\Pyrite.Content.Abstractions.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Pyrite.Content.Domain\Pyrite.Content.Domain.csproj" />
+    <Folder Include="Events\" />
   </ItemGroup>
 
 </Project>
