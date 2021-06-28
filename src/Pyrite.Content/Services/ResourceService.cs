@@ -33,10 +33,7 @@ namespace Pyrite.Content.Services
 
         public async Task CreateAsync(Resource resource)
         {
-            string claimCheckBodyLocation = null;
-
-            if (resource.Body.Length > 500)
-                claimCheckBodyLocation = await CreateClaimCheckResourceAsync(resource);
+            var claimCheckBodyLocation = await CreateClaimCheckResourceAsync(resource);
 
             await this._resourceRepository.CreateAsync(resource);
 
@@ -80,10 +77,7 @@ namespace Pyrite.Content.Services
 
         public async Task UpdateAsync(Resource resource)
         {
-            string claimCheckBodyLocation = null;
-
-            if (resource.Body.Length > 500)
-                claimCheckBodyLocation = await CreateClaimCheckResourceAsync(resource);
+            var claimCheckBodyLocation = await CreateClaimCheckResourceAsync(resource);
 
             await this._resourceRepository.UpdateAsync(resource);
 
