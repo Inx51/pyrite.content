@@ -5,11 +5,19 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Pyrite.Content.Abstractions\Pyrite.Content.Abstractions.csproj" />
+    <Compile Remove="Constants\**" />
+    <Compile Remove="Events\**" />
+    <EmbeddedResource Remove="Constants\**" />
+    <EmbeddedResource Remove="Events\**" />
+    <None Remove="Constants\**" />
+    <None Remove="Events\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Events\" />
+    <PackageReference Include="Pyrite.Event.Abstractions" Version="0.1.0.3" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Pyrite.Content.Abstractions\Pyrite.Content.Abstractions.csproj" />
+  </ItemGroup>
 </Project>

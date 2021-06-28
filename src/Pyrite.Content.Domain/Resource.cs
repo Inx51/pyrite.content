@@ -6,11 +6,11 @@ namespace Pyrite.Content.Domain
 {
     public class Resource
     {
-        public string Identifier { get; internal set; }
+        public string Identifier { get; private set; }
 
-        public IEnumerable<KeyValuePair<string, StringValues>> Headers { get; internal set; }
+        public IEnumerable<KeyValuePair<string, StringValues>> Headers { get; private set; }
 
-        public Stream Body { get; internal set; }
+        public Stream Body { get; private set; }
 
         public Resource
         (
